@@ -1,6 +1,7 @@
 # mern_shop
 
 PAGINACIÓN WEB FULLSTACKJS
+
 Desarrollar una tienda online donde se muestre un listado de artículos dividido en 10 por
 página, con dos controles: ‘anterior’ y ‘siguiente’.
 Cada artículo será mostrado en una tarjeta que deberá contener los siguientes datos:
