@@ -1,0 +1,121 @@
+{
+    "data":[
+        {
+        "id": 1,
+        "Nombre": "Zapatillas",
+        "Precio": 50,
+        "Relevancia": 1,
+        "id_fabricante": 11
+        },
+        {
+        "id": 2,
+        "Nombre": "Camiseta",
+        "Precio": 15,
+        "Relevancia": 3,
+        "id_fabricante": 12
+        },
+        {
+        "id": 3,
+        "Nombre": "Reloj",
+        "Precio": 75,
+        "Relevancia": 7,
+        "id_fabricante": 13
+        },
+        {   
+        "id": 4,
+        "Nombre": "Zapatillas",
+        "Precio": 65,
+        "Relevancia": 1,
+        "id_fabricante": 13
+        },
+        {   
+        "id": 5,
+        "Nombre": "Pantalon",
+        "Precio": 25,
+        "Relevancia": 2,
+        "id_fabricante": 11
+        },
+        {   
+        "id": 6,
+        "Nombre": "Chubasquero",
+        "Precio": 30,
+        "Relevancia": 5,
+        "id_fabricante": 14
+        },
+        {   
+        "id": 7,
+        "Nombre": "Chandal",
+        "Precio": 150,
+        "Relevancia": 4,
+        "id_fabricante": 12
+        },
+        {
+        "id": 8,
+        "Nombre": "Zapatillas",
+        "Precio": 150,
+        "Relevancia": 1,
+        "id_fabricante": 16
+        },
+        {
+        "id": 9,
+        "Nombre": "Gafas",
+        "Precio": 80,
+        "Relevancia": 3,
+        "id_fabricante": 15
+        },
+        {
+        "id": 10,
+        "Nombre": "Gorra",
+        "Precio": 35,
+        "Relevancia": 6,
+        "id_fabricante": 16
+        },
+        {
+        "id": 11,
+        "Nombre": "Sudadera",
+        "Precio": 55,
+        "Relevancia": 4,
+        "id_fabricante": 13
+        },
+        {
+        "id": 12,
+        "Nombre": "Pantalon",
+        "Precio": 30,
+        "Relevancia": 2,
+        "id_fabricante": 14
+        }
+    ]
+};
+
+
+{
+    "fabricante"[
+
+        {
+            "Nombre": "Nike",
+            "CIF": "12345",
+            "Dirección": "Calle Preciados"
+        },
+        {
+            "Nombre": "Adidas",
+            "CIF": "38478",
+            "Dirección": "Calle Princesa"
+        },
+        {
+            "Nombre": "Reebok",
+            "CIF": "90809",
+            "Dirección": "Calle Alcalá"
+        },
+        {
+            "Nombre": "Kelme",
+            "CIF": "12455",
+            "Dirección": "Calle Preciados"
+        },
+        {
+            "Nombre": "Deportes Gálvez",
+            "CIF": "86789",
+            "Dirección": "Calle Bravo Murillo"
+        },
+    ]
+
+}
