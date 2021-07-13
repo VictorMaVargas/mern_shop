@@ -7,12 +7,13 @@ const port = 5000
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+//Servidor levantado
 app.get('/', (req, res) => {
   res.send('Servidor funcionando')
 })
+
 app.get('/search', (req, res) => {
-  console.log("hola");
-  console.log(req.query);
+  //console.log(req.query);
   if(req.query.name){
     const dbSearch = db.getProductsByName(req.query.name)//llamo a la BBDD
     res.send(dbSearch)

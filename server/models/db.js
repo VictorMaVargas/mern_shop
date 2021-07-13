@@ -12,7 +12,7 @@ async function conn(){
 }
 // CRUD
 const products = {
-    // Read --> db.collection.find()
+    // Función para leer los articulos de la BBDD
     getProductsByName: async (Nombre) => {
         const client = await conn();
         let result;
