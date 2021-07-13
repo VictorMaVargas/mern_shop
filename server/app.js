@@ -1,7 +1,8 @@
 const express = require('express')
 const db = require('./models/db')
+require ('dotenv').config();
 const app = express()
-const port = 5000
+const port = process.env.PORT || 5000
 
 // Para habilitar recepcion de JSONs
 app.use(express.urlencoded({ extended: true }));
@@ -19,11 +20,7 @@ app.get('/search', (req, res) => {
     res.send(dbSearch)
     
   }
-
-  
 })
-
-
 
 
 app.listen(port, () => {

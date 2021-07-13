@@ -3,4 +3,4 @@
 -Search tendrá searchButton y OrderButtons y ProductList XX
 -El Link del botón del searchBar dirigirá a la ruta searchBar con /search?name=${inputText}
 
--Cambiar id de fabricante en BBDD XX
+-Cambiar IDs de fabricante en BBDD XX
