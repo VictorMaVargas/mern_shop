@@ -1,9 +1,9 @@
-const MongoClient = require('mongodb').MongoClient;
+const Mongo = require('mongodb')
 const url = "mongodb://localhost:27017/tiendaonline";
 
 // Conexión
 async function conn(){
-    const client = await MongoClient(url,{ useUnifiedTopology: true });
+    const client = await Mongo.MongoClient(url,{ useUnifiedTopology: true });
     client
     .connect()
     .then(()=>console.log("BBDD Conectada"))
@@ -16,15 +16,39 @@ const products = {
     getProductsByName: async (Nombre) => {
         const client = await conn();
         let result;
-        Nombre? result = await client.db("tiendaonline").collection("articulos").find({ "Nombre": Nombre }).toArray():
+        Nombre !== '' ? result = await client.db("tiendaonline").collection("articulos").find({ "Nombre": Nombre }).toArray():
             result = await client.db("tiendaonline").collection("articulos").find().toArray();
-            console.log(result)
     
         if (result) {
-            console.log(`Hay articulo con el nombre '${Nombre}':`);
+            console.log(`Hay articulo con el nombre '${Nombre}`);
             console.log(result);
         } else {
-            console.log(`No hay articulos con el nombre'${Nombre}'`);
+            console.log(`No hay articulos con el nombre'${Nombre}`);
+        }
+        return result;
+    },
+    getProvidersByName: async (Provider) => {
+        const client = await conn();
+        let result;
+        Provider !== '' ? result = await client.db("tiendaonline").collection("fabricante").find({ "Nombre": Provider }).toArray():
+            result = await client.db("tiendaonline").collection("fabricante").find().toArray();
+    
+        if (result) {
+            console.log(`Datos del fabricante con el nombre '${Provider}`);
+            console.log(result);
+        } else {
+            console.log(`Datos del fabricante con el nombre'${Provider}`);
+        }
+        return result;
+    },
+    getManufacturerById: async (id) => {
+        const client = await conn();
+        const result = await client.db("tiendaonline").collection("fabricante").find({ "_id": Mongo.ObjectID(id)}).toArray()
+        if (result) {
+            console.log(`Hay proveedor con el id '${id}`);
+            console.log(result);
+        } else {
+            console.log(`No hay proveedor con el id'${id}`);
         }
         return result;
     }
