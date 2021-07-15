@@ -10,9 +10,10 @@ async function conn(){
     .catch(e=>console.log(e));
     return client; // Objeto de conexion a la BBDD
 }
-// CRUD
 const products = {
-    // Función para leer los articulos de la BBDD
+
+    // Función para leer los articulos de la BBDD por nombre
+
     getProductsByName: async (Nombre) => {
         const client = await conn();
         let result;
@@ -27,6 +28,9 @@ const products = {
         }
         return result;
     },
+
+    // Función para leer los fabricantes de la BBDD por nombre
+
     getProvidersByName: async (Provider) => {
         const client = await conn();
         let result;
@@ -41,6 +45,9 @@ const products = {
         }
         return result;
     },
+
+    // Función para leer los fabricantes de la BBDD por ID
+
     getManufacturerById: async (id) => {
         const client = await conn();
         const result = await client.db("tiendaonline").collection("fabricante").find({ "_id": Mongo.ObjectID(id)}).toArray()

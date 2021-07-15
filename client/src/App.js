@@ -15,6 +15,7 @@ function App() {
           <Switch>
             <Route path='/' component={Home} exact/>
             <Route path='/search' component={Search}/>
+            <Route path='/providers' component={Search}/>
           </Switch>
         </BrowserRouter>
       </Grid>

@@ -9,18 +9,23 @@ import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import Modal from '@material-ui/core/Modal';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from "react-router-dom";
+import ShoppingCartTwoToneIcon from '@material-ui/icons/ShoppingCartTwoTone';
+//https://www.npmjs.com/package/react-pagination-list
+import PaginationList from 'react-pagination-list';
+
 import './Search.css';
 
 
 const Search = () => {
     const [data, setData] = useState([]); //Datos de artículos del backend
-    const [inputText, setInputText] = useState ('') //Input text del text field
-    const [performSearch, setPerformSearch] = useState(false) // Click en el botón Buscar
+    const [dataProviders, setDataProviders] = useState([]); //Datos de artículos del backend
+    const [performSearchArticles, setPerformSearchArticles] = useState(false) // Click en el botón Buscar
+    const [performSearchProviders, setPerformSearchProviders] = useState(false) // Click en el botón Buscar
     const [orderLogic, setOrderLogic] = useState(false) // Click en alguno de los botones de ordenación
     const [openModal, setOpenModal] = useState(false); // Para abrir o cerrar el modal
     const [modalData, setModalData] = useState({}); // Para pasarle info sobre que elemento hemos hecho click
     const [providerData, setProviderData] = useState({});
-    const history = useHistory(); // History para hacer push de las rutas y obtener el query params
+    const [searchArticle, setSearchArticle] = useState(true);
 
     const getModalStyle = () => {
         const top = 50; 
@@ -51,26 +56,51 @@ const Search = () => {
             const urlParams = new URLSearchParams(window.location.search);
             const myParam = urlParams.get('name');
             const result = await axios(
-            `http://localhost:5000/search?name=${myParam}`,
+            `http://localhost:5000/articles?name=${myParam}`,
             );
-            console.log('datooos',result.data)
+            console.log(result.data)
             setData(result.data);
         }
         const apiRequestProviders = async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const myParam = urlParams.get('name');
+            console.log('aquiii',myParam)
+            const result = await axios(
+            `http://localhost:5000/providers?name=${myParam}`,
+            );
+            console.log(result.data)
+            setDataProviders(result.data);
+        }
+        const apiRequestProvidersById = async () => {
             const result = await axios(
             `http://localhost:5000/searchProvider?id=${modalData.id_fabricante}`,
             );
-            console.log('datooos Fabricante',result.data)
+            console.log(result.data)
             setProviderData(result.data[0]);
         }
-        apiRequestArticles();
-        apiRequestProviders();
-    }, [performSearch, modalData]);
+        if(performSearchArticles){
+            apiRequestArticles();
+            setPerformSearchArticles(false);
+        }
+        if(performSearchProviders){
+            console.log("weee")
+            apiRequestProviders();
+            setPerformSearchProviders(false);
+        }
+        if(modalData.id_fabricante !== undefined ){
+            apiRequestProvidersById();
+        }
+    }, [performSearchArticles, performSearchProviders, modalData]);
+
+    
     const SearchBar = () => {
+            const history = useHistory();
+            const [inputText, setInputText] = useState ('')
+            
         return (
             <Grid container spacing={5}>
-                <Grid item xs={12}>
-                  <h1>THE MERN SHOP</h1>
+                <Grid className="grid" item xs={12}>
+                  <h1>THE MERN SHOP<ShoppingCartTwoToneIcon/></h1>
                   <form noValidate autoComplete="off">
                     <TextField
                         value={inputText}
@@ -78,10 +108,16 @@ const Search = () => {
                         id="outlined-basic" label="Buscar" variant="outlined">
                     </TextField>
                   </form>
-                      <Button onClick={() => {
-                          setPerformSearch(!performSearch)
-                          history.push(`/search?name=${inputText}`)
-                          }} variant="contained">Buscar</Button>
+                        <Button className="btn" onClick={() => {
+                            setPerformSearchArticles(true)
+                            setSearchArticle(true)
+                            history.push(`/search?name=${inputText}`)
+                            }} variant="contained">Buscar Artículo</Button>
+                        <Button className="btn" onClick={() => {
+                            setPerformSearchProviders(true)
+                            setSearchArticle(false)
+                            history.push(`/providers?name=${inputText}`)
+                            }} variant="contained">Buscar Fabricante</Button>
                 </Grid>
             </Grid>
         )
@@ -146,18 +182,61 @@ const Search = () => {
 
     const ProductList = () => {
         return (
-            <Grid item xs={12}>
+            <Grid className="cards" item xs={12}>
+            {data.length > 0 ?
+                <PaginationList
+                data={data}
+                pageSize={10}
+                renderItem={(elem) => (
+                        <div key={elem._id} className="test" onClick={() => onClickName(elem)} >
+                            <h3>Artículo</h3>
+                            <img src={elem.Img} alt="imagen"/>
+                            <p><b>Nombre:</b> {elem.Nombre}</p> 
+                            <p><b>Precio:</b> {elem.Precio}</p> 
+                            <p><b>Relevancia:</b> {elem.Relevancia}</p>
+                        </div>
+                )}
+                ></PaginationList>
+            : <p>No existe el artículo</p>
+            }
+            </Grid>
+        )
+        // return (
+        //     <Grid className="cards" item xs={12}>
+        //         {
+        //         data.length > 0 ? data.map(elem => {
+        //             return (
+        //                 <div className="test" onClick={() => onClickName(elem)} key={elem._id}>
+        //                     <h3>Artículo</h3>
+        //                     <img src={elem.Img} alt="imagen"/>
+        //                     <p><b>Nombre:</b> {elem.Nombre}</p> 
+        //                     <p><b>Precio:</b> {elem.Precio}</p> 
+        //                     <p><b>Relevancia:</b> {elem.Relevancia}</p>
+        //                 </div>
+        //             )
+        //         })
+        //         : <p>No existe el artículo</p>
+        //         }
+        //     </Grid>
+        // )
+    }
+    const ProvidersList = () => {
+        return (
+            <Grid className="cards" item xs={12}>
                 {
-                data.length > 0 ? data.map(elem => {
+                dataProviders.length > 0 ? dataProviders.map(elem => {
                     return (
-                        <div onClick={() => onClickName(elem)} key={elem._id}>
-                            <p className="test">{elem.Nombre}</p> 
-                            <p>{elem.Precio}</p> 
-                            <p>{elem.Relevancia}</p> 
+                        <div className="test" key={elem._id}>
+                            <h3>Proveedor</h3>
+                            <img src={elem.Img} alt="imagen"/>
+                            <p><b>NOMBRE:</b> {elem.Nombre}</p> 
+                            <p><b>CIF:</b> {elem.CIF}</p> 
+                            <p><b>DIRECCIÓN:</b> {elem.Dirección}</p>
+                            
                         </div>
                     )
                 })
-                : <p>No existe el artículo</p>
+                : <p>No existe el proveedor</p>
                 }
             </Grid>
         )
@@ -178,7 +257,6 @@ const Search = () => {
         <div>
         <Grid container spacing={5}>
             <SearchBar/>
-            <OrderButtons/>
             <Modal 
                 open={openModal} 
                 onClose={() => setOpenModal(false)}
@@ -186,16 +264,26 @@ const Search = () => {
                 aria-describedby="simple-modal-description"
                 >
                 <div style={modalStyle} className={classes.paper}>
-                    <p>{modalData.Nombre}</p> 
-                    <p>{modalData.Precio}</p> 
-                    <p>{modalData.Relevancia}</p> 
-                    <p>{providerData.Nombre}</p> 
-                    <p>{providerData.CIF}</p> 
-                    <p>{providerData.Dirección}</p> 
+                    <h3>Artículo</h3>
+                    <p><b>Nombre:</b> {modalData.Nombre}</p> 
+                    <p><b>Precio:</b> {modalData.Precio}</p> 
+                    <p><b>Relevancia:</b> {modalData.Relevancia}</p>
+                    <br />
+                    <h3>Fabricante</h3>
+                    <p><b>Nombre:</b> {providerData.Nombre}</p> 
+                    <p><b>CIF:</b> {providerData.CIF}</p> 
+                    <p><b>Dirección:</b> {providerData.Dirección}</p> 
                 </div>
             </Modal>
-            <ProductList/>
-            <Footer/>
+            {searchArticle ? 
+            <Grid container>
+                <OrderButtons/>
+                <ProductList/>
+            </Grid>
+            :
+            <ProvidersList/>
+            }
+            {/* <Footer/> */}
         </Grid>
         </div>
     )

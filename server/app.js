@@ -13,7 +13,7 @@ app.get('/', (req, res) => {
   res.send('Servidor funcionando')
 })
 
-app.get('/search', async (req, res) => {
+app.get('/articles', async (req, res) => {
   if(req.query.name !== undefined){
     const dbSearch = await db.getProductsByName(req.query.name)//llamo a la BBDD
     res.send(dbSearch)
@@ -22,9 +22,10 @@ app.get('/search', async (req, res) => {
     const dbSearch = await db.getProductsByName()//llamo a la BBDD
     res.send(dbSearch)
   }
-  if(req.query.provider !== undefined){
-    console.log("aquiiii")
-    const dbSearch = await db.getProvidersByName(req.query.provider)//llamo a la BBDD
+})
+app.get('/providers', async (req, res) => {
+  if(req.query.name !== undefined){
+    const dbSearch = await db.getProvidersByName(req.query.name)//llamo a la BBDD
     res.send(dbSearch)
   }
   else{
