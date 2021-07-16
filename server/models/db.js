@@ -1,7 +1,8 @@
 const Mongo = require('mongodb')
 const url = "mongodb://localhost:27017/tiendaonline";
 
-// Conexión
+// Conexión a la BBDD con MongoDB
+
 async function conn(){
     const client = await Mongo.MongoClient(url,{ useUnifiedTopology: true });
     client
@@ -10,9 +11,9 @@ async function conn(){
     .catch(e=>console.log(e));
     return client; // Objeto de conexion a la BBDD
 }
-const products = {
+// Lee los articulos de la BBDD por nombre
 
-    // Función para leer los articulos de la BBDD por nombre
+const products = {
 
     getProductsByName: async (Nombre) => {
         const client = await conn();
@@ -29,7 +30,7 @@ const products = {
         return result;
     },
 
-    // Función para leer los fabricantes de la BBDD por nombre
+    // Lee los proveedores de la BBDD por nombre
 
     getProvidersByName: async (Provider) => {
         const client = await conn();
@@ -46,7 +47,7 @@ const products = {
         return result;
     },
 
-    // Función para leer los fabricantes de la BBDD por ID
+    // Función para leer los proveedores de la BBDD por ID
 
     getManufacturerById: async (id) => {
         const client = await conn();

@@ -1,7 +1,4 @@
 import React from 'react'
-// import SearchBar from '../components/SearchBar/SearchBar'
-// import Grid from '@material-ui/core/Grid';
-//import ShoppingCartTwoToneIcon from '@material-ui/icons/ShoppingCartTwoTone';
 import './home.css';
 
 const Home = () => {

@@ -1,3 +1,5 @@
+const Mongo = require('mongodb')
+const url = "mongodb://localhost:27017/tiendaonline";
 
 const Product = require('../models/Product')
 

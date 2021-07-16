@@ -1,6 +1,0 @@
--App.js crear Switch con componentes (home y search). Crear Pages XX
--Home tendrá solo searchButton XX
--Search tendrá searchButton y OrderButtons y ProductList XX
--El Link del botón del searchBar dirigirá a la ruta searchBar con /search?name=${inputText}
-
--Cambiar IDs de fabricante en BBDD XX

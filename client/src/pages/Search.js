@@ -4,53 +4,30 @@ import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import Modal from '@material-ui/core/Modal';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from "react-router-dom";
 import ShoppingCartTwoToneIcon from '@material-ui/icons/ShoppingCartTwoTone';
-//https://www.npmjs.com/package/react-pagination-list
 import PaginationList from 'react-pagination-list';
-
 import './Search.css';
 
 
 const Search = () => {
     const [data, setData] = useState([]); //Datos de artículos del backend
     const [dataProviders, setDataProviders] = useState([]); //Datos de artículos del backend
-    const [performSearchArticles, setPerformSearchArticles] = useState(false) // Click en el botón Buscar
-    const [performSearchProviders, setPerformSearchProviders] = useState(false) // Click en el botón Buscar
+    const [performSearchArticles, setPerformSearchArticles] = useState(false) // Click en el botón Buscar de artículos
+    const [performSearchProviders, setPerformSearchProviders] = useState(false) // Click en el botón Buscar de proovedores
     const [orderLogic, setOrderLogic] = useState(false) // Click en alguno de los botones de ordenación
     const [openModal, setOpenModal] = useState(false); // Para abrir o cerrar el modal
-    const [modalData, setModalData] = useState({}); // Para pasarle info sobre que elemento hemos hecho click
-    const [providerData, setProviderData] = useState({});
-    const [searchArticle, setSearchArticle] = useState(true);
-
-    const getModalStyle = () => {
-        const top = 50; 
-        const left = 50;
-      
-        return {
-          top: `${top}%`,
-          left: `${left}%`,
-          transform: `translate(-${top}%, -${left}%)`,
-        };
-      }
-    const [modalStyle] = useState(getModalStyle);
-      
-      const useStyles = makeStyles((theme) => ({
-        paper: {
-          position: 'absolute',
-          width: 400,
-          backgroundColor: theme.palette.background.paper,
-          border: '2px solid #000',
-          boxShadow: theme.shadows[5],
-          padding: theme.spacing(2, 4, 3),
-        },
-      }));
-      const classes = useStyles();
+    const [modalData, setModalData] = useState({}); // Para pasarle info sobre qué elemento hemos hecho click
+    const [providerData, setProviderData] = useState({});// Toma los datos de los proveedores
+    const [searchArticle, setSearchArticle] = useState(true);// Busca los artículos
     
+
+    
+    
+      //Axios para tomar de la BBDD los artículos (por nombre) y los proveedores (nombre e ID)
+
     useEffect(() => {
         const apiRequestArticles = async () => {
             const urlParams = new URLSearchParams(window.location.search);
@@ -64,7 +41,6 @@ const Search = () => {
         const apiRequestProviders = async () => {
             const urlParams = new URLSearchParams(window.location.search);
             const myParam = urlParams.get('name');
-            console.log('aquiii',myParam)
             const result = await axios(
             `http://localhost:5000/providers?name=${myParam}`,
             );
@@ -83,7 +59,6 @@ const Search = () => {
             setPerformSearchArticles(false);
         }
         if(performSearchProviders){
-            console.log("weee")
             apiRequestProviders();
             setPerformSearchProviders(false);
         }
@@ -92,36 +67,41 @@ const Search = () => {
         }
     }, [performSearchArticles, performSearchProviders, modalData]);
 
-    
+    //Barra de búsqueda que toma lo escrito para buscar tanto artículos como proveedores con botones
+
     const SearchBar = () => {
             const history = useHistory();
             const [inputText, setInputText] = useState ('')
             
         return (
-            <Grid container spacing={5}>
-                <Grid className="grid" item xs={12}>
-                  <h1>THE MERN SHOP<ShoppingCartTwoToneIcon/></h1>
-                  <form noValidate autoComplete="off">
-                    <TextField
-                        value={inputText}
-                        onChange={(e)=> setInputText(e.target.value)}
-                        id="outlined-basic" label="Buscar" variant="outlined">
-                    </TextField>
-                  </form>
-                        <Button className="btn" onClick={() => {
-                            setPerformSearchArticles(true)
-                            setSearchArticle(true)
-                            history.push(`/search?name=${inputText}`)
-                            }} variant="contained">Buscar Artículo</Button>
-                        <Button className="btn" onClick={() => {
-                            setPerformSearchProviders(true)
-                            setSearchArticle(false)
-                            history.push(`/providers?name=${inputText}`)
-                            }} variant="contained">Buscar Fabricante</Button>
-                </Grid>
+        <Grid container spacing={5}>
+            <Grid item xs={12}>
+                <h1>THE MERN SHOP<ShoppingCartTwoToneIcon/></h1>
+                <form noValidate autoComplete="off">
+                <TextField
+                    value={inputText}
+                    onChange={(e)=> setInputText(e.target.value)}
+                    id="outlined-basic" label="Buscar" variant="outlined">
+                </TextField>
+                </form>
+                    <Button className="btn1" onClick={() => {
+                        setPerformSearchArticles(true)
+                        setSearchArticle(true)
+                        history.push(`/search?name=${inputText}`)
+                        }} variant="contained">Buscar Artículo</Button>
+                        
+                    <Button className="btn2" onClick={() => {
+                        setPerformSearchProviders(true)
+                        setSearchArticle(false)
+                        history.push(`/providers?name=${inputText}`)
+                        }} variant="contained">Buscar Proveedor</Button>
             </Grid>
+        </Grid>
         )
     }
+
+    //Funciones que ordenan en orden ascendente y descendente por precio, relevancia y nombre pulsando los botones
+
     const OrderButtons = () => {
         const orderByPrice = () => {
             setOrderLogic(!orderLogic)
@@ -175,11 +155,9 @@ const Search = () => {
             </Grid>
         )
     }
-    const onClickName = (elem) => {
-        setModalData({...elem})
-        setOpenModal(true)
-    }
-
+    
+    //Pinta la Lista de artículos que va "envuelta" en el paquete npm paginationList que sirve para mostrar la paginación de 10 en 10 productos
+    
     const ProductList = () => {
         return (
             <Grid className="cards" item xs={12}>
@@ -188,7 +166,7 @@ const Search = () => {
                 data={data}
                 pageSize={10}
                 renderItem={(elem) => (
-                        <div key={elem._id} className="test" onClick={() => onClickName(elem)} >
+                        <div className="test" onClick={() => onClickName(elem)} >
                             <h3>Artículo</h3>
                             <img src={elem.Img} alt="imagen"/>
                             <p><b>Nombre:</b> {elem.Nombre}</p> 
@@ -201,25 +179,10 @@ const Search = () => {
             }
             </Grid>
         )
-        // return (
-        //     <Grid className="cards" item xs={12}>
-        //         {
-        //         data.length > 0 ? data.map(elem => {
-        //             return (
-        //                 <div className="test" onClick={() => onClickName(elem)} key={elem._id}>
-        //                     <h3>Artículo</h3>
-        //                     <img src={elem.Img} alt="imagen"/>
-        //                     <p><b>Nombre:</b> {elem.Nombre}</p> 
-        //                     <p><b>Precio:</b> {elem.Precio}</p> 
-        //                     <p><b>Relevancia:</b> {elem.Relevancia}</p>
-        //                 </div>
-        //             )
-        //         })
-        //         : <p>No existe el artículo</p>
-        //         }
-        //     </Grid>
-        // )
+        
     }
+    //Lista de proveedores
+
     const ProvidersList = () => {
         return (
             <Grid className="cards" item xs={12}>
@@ -229,10 +192,9 @@ const Search = () => {
                         <div className="test" key={elem._id}>
                             <h3>Proveedor</h3>
                             <img src={elem.Img} alt="imagen"/>
-                            <p><b>NOMBRE:</b> {elem.Nombre}</p> 
+                            <p><b>Nombre:</b> {elem.Nombre}</p> 
                             <p><b>CIF:</b> {elem.CIF}</p> 
-                            <p><b>DIRECCIÓN:</b> {elem.Dirección}</p>
-                            
+                            <p><b>Dirección:</b> {elem.Dirección}</p>
                         </div>
                     )
                 })
@@ -241,18 +203,41 @@ const Search = () => {
             </Grid>
         )
     }
-    const Footer = () => {
-        return (
-            <Grid item xs={12}>
-            <ButtonGroup aria-label="outlined primary button group">
-                <Button><ArrowBackIcon/>Anterior</Button>
-                <Button>Siguiente<ArrowForwardIcon/></Button>
-            </ButtonGroup>
-            </Grid>
-        )
-    }
-    
 
+    //Abre la tarjeta modal a modo de pop-up
+
+    const onClickName = (elem) => {
+        setModalData({...elem})
+        setOpenModal(true)
+    }
+    //Estilos de la tarjeta modal (por defecto) sacada de Material UI
+    const getModalStyle = () => {
+        const top = 50; 
+        const left = 50;
+      
+        return {
+          top: `${top}%`,
+          left: `${left}%`,
+          transform: `translate(-${top}%, -${left}%)`,
+        };
+      }
+      const [modalStyle] = useState(getModalStyle);
+    
+      
+      const useStyles = makeStyles((theme) => ({
+        paper: {
+          position: 'absolute',
+          width: 300,
+          backgroundColor: theme.palette.background.paper,
+          border: '2px solid #000',
+          boxShadow: theme.shadows[5],
+          padding: theme.spacing(1, 3, 2),
+        },
+      }));
+      const classes = useStyles();
+
+    //Tarjeta modal que muestra datos de artículo y proveedor
+    
     return (
         <div>
         <Grid container spacing={5}>
@@ -283,7 +268,6 @@ const Search = () => {
             :
             <ProvidersList/>
             }
-            {/* <Footer/> */}
         </Grid>
         </div>
     )
