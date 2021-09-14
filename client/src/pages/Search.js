@@ -12,6 +12,7 @@ import PaginationList from 'react-pagination-list';
 import './Search.css';
 
 
+
 const Search = () => {
     const [data, setData] = useState([]); //Datos de artículos del backend
     const [dataProviders, setDataProviders] = useState([]); //Datos de artículos del backend
